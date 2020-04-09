@@ -8,16 +8,32 @@ namespace FFMpeg.Arguments.Atoms
     /// </summary>
     public class OutputArgument : IArgument
     {
-        public OutputArgument(FileInfo value) => Destination = value.FullName;
+        private bool _overwrite;
 
-        public OutputArgument(Uri value) => Destination = value.AbsolutePath;
+        public OutputArgument(FileInfo value, bool overwrite = true)
+        {
+            Destination = value.FullName;
+            _overwrite = overwrite;
+        }
+
+        public OutputArgument(Uri value, bool overwrite = true)
+        {
+            Destination = value.AbsolutePath;
+            _overwrite = overwrite;
+        }
 
         public string Destination { get; }
 
         /// <inheritdoc/>
         public string GetStringValue()
         {
-            return $"\"{Destination}\"";
+            var argument = string.Empty;
+            if (_overwrite)
+            {
+                argument += "-y ";
+            }
+            argument += $"\"{Destination}\"";
+            return argument;
         }
     }
 }

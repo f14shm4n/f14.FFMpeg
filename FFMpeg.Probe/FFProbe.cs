@@ -9,6 +9,7 @@ using FFMpeg.Probe.Internal.Json;
 using FFMpeg.Probe.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using FFMpeg.Probe.Exceptions;
 
 namespace FFMpeg.Probe
 {
@@ -33,7 +34,7 @@ namespace FFMpeg.Probe
         {
             if (!url.IsWellFormedOriginalString())
             {
-                throw new ArgumentException($"Invalid url. Url: '{url}'.", nameof(url));
+                throw new UriFormatException($"Invalid url. Url: '{url}'.");
             }
             return GetMetadataInternalAsync(url.ToString());
         }
@@ -64,7 +65,7 @@ namespace FFMpeg.Probe
 
             if (probeMetadata.Streams == null || probeMetadata.Streams.Count == 0)
             {
-                throw new InvalidOperationException($"No video or audio streams could be detected.");
+                throw new FFProbeInvalidSourceException($"No video or audio streams could be detected.");
             }
 
             var metadata = new Metadata();
@@ -90,14 +91,17 @@ namespace FFMpeg.Probe
                     {
                         Format = stream.CodecName,
                         Fps = Math.Round(Convert.ToDouble(fr[0], CultureInfo.InvariantCulture) / Convert.ToDouble(fr[1], CultureInfo.InvariantCulture), 3),
-                        BitRate = bitRate,
+                        Bitrate = bitRate,
                         Height = stream.Height,
                         Width = stream.Width,
                         Ratio = stream.Width / commonDenominator + ":" + stream.Height / commonDenominator,
                         Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
                         Duration = duration
                     };
+
                     metadata.AddVideoStream(vsmd);
+
+                    metadata.Duration = Max(metadata.Duration, duration);
                 }
             }
         }
@@ -114,14 +118,18 @@ namespace FFMpeg.Probe
                     var asmd = new AudioStreamMetadata
                     {
                         Format = stream.CodecName,
-                        BitRate = bitRate,
+                        Bitrate = bitRate,
                         Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
                         Duration = duration
                     };
 
                     metadata.AddAudioStream(asmd);
+
+                    metadata.Duration = Max(metadata.Duration, duration);
                 }
             }
         }
+
+        private static TimeSpan Max(TimeSpan x, TimeSpan y) => x > y ? x : y;
     }
 }

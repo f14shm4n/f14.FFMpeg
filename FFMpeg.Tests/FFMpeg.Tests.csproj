@@ -59,6 +59,12 @@
     <None Update="Resources\sample.mov">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\sample.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\sample.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\sample.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

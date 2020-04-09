@@ -8,7 +8,7 @@ namespace FFMpeg.Probe.Internal
     {
         public string Format { get; set; } = string.Empty;
 
-        public int BitRate { get; set; }
+        public int Bitrate { get; set; }
 
         public long Size { get; set; }
 
@@ -19,7 +19,7 @@ namespace FFMpeg.Probe.Internal
             var sb = new StringBuilder();
             sb.AppendLine("Audio stream metadata:");
             sb.AppendLine($"- {nameof(Format)}: {Format}");
-            sb.AppendLine($"- {nameof(BitRate)}: {BitRate}");
+            sb.AppendLine($"- {nameof(Bitrate)}: {Bitrate}");
             sb.AppendLine($"- {nameof(Size)}: {Size}");
             sb.AppendLine($"- {nameof(Duration)}: {Duration.TotalSeconds}");
             return sb.ToString();

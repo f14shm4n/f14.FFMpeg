@@ -5,12 +5,25 @@
     /// </summary>
     public class AudioCodecArgument : IArgument
     {
-        private readonly AudioCodec _codec;
-        private readonly int _bitrate = AudioQuality.Normal;
+        private readonly string? _codec;
+        private readonly int? _bitrate;
 
-        public AudioCodecArgument(AudioCodec codec) => _codec = codec;
-
-        public AudioCodecArgument(AudioCodec codec, int bitrate)
+        /// <summary>
+        /// Creates new audio codec argument.
+        /// </summary>
+        /// <param name="codec">Audio codec.</param>
+        public AudioCodecArgument(string codec) => _codec = codec;
+        /// <summary>
+        /// Creates new audio codec argument.
+        /// </summary>
+        /// <param name="bitrate">Audio bitrate in kBit/s</param>
+        public AudioCodecArgument(int bitrate) => _bitrate = bitrate;
+        /// <summary>
+        /// Creates new audio codec argument.
+        /// </summary>
+        /// <param name="codec">Audio codec.</param>
+        /// <param name="bitrate">Audio bitrate in kBit/s</param>
+        public AudioCodecArgument(string codec, int bitrate)
         {
             _codec = codec;
             _bitrate = bitrate;
@@ -19,7 +32,21 @@
         /// <inheritdoc/>
         public string GetStringValue()
         {
-            return $"-c:a {_codec.ToString().ToLower()} -b:a {_bitrate}k";
+            var arguments = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(_codec))
+            {
+                arguments += $"-c:a {_codec}";
+            }
+            if (_bitrate.HasValue)
+            {
+                if (arguments.Length > 0)
+                {
+                    arguments += " ";
+                }
+                arguments += $"-b:a {_bitrate}k";
+            }
+            return arguments;
         }
     }
 }

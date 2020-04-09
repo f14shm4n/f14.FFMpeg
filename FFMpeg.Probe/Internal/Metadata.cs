@@ -11,8 +11,8 @@ namespace FFMpeg.Probe.Internal
         private readonly List<IAudioStreamMetadata> _audioStreams = new List<IAudioStreamMetadata>();
 
         public TimeSpan Duration { get; set; }
-        public IReadOnlyCollection<IVideoStreamMetadata> VideoStreams => _videoStreams;
-        public IReadOnlyCollection<IAudioStreamMetadata> AudioStreams => _audioStreams;
+        public IReadOnlyList<IVideoStreamMetadata> VideoStreams => _videoStreams;
+        public IReadOnlyList<IAudioStreamMetadata> AudioStreams => _audioStreams;
 
         public void AddVideoStream(IVideoStreamMetadata videoStream) => _videoStreams.Add(videoStream);
         public void AddAudioStream(IAudioStreamMetadata audioStream) => _audioStreams.Add(audioStream);

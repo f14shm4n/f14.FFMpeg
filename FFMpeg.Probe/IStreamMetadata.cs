@@ -7,7 +7,7 @@ namespace FFMpeg.Probe
     public interface IStreamMetadata
     {
         string Format { get; }
-        int BitRate { get; }
+        int Bitrate { get; }
         long Size { get; }
         TimeSpan Duration { get; }
     }

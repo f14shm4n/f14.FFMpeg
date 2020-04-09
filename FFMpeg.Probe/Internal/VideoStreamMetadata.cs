@@ -15,7 +15,7 @@ namespace FFMpeg.Probe.Internal
 
         public string Ratio { get; set; } = string.Empty;
 
-        public int BitRate { get; set; }
+        public int Bitrate { get; set; }
 
         public long Size { get; set; }
 
@@ -28,7 +28,7 @@ namespace FFMpeg.Probe.Internal
             var sb = new StringBuilder();
             sb.AppendLine("Video stream metadata:");
             sb.AppendLine($"- {nameof(Format)}: {Format}");
-            sb.AppendLine($"- {nameof(BitRate)}: {BitRate}");
+            sb.AppendLine($"- {nameof(Bitrate)}: {Bitrate}");
             sb.AppendLine($"- {nameof(Size)}: {Size}");
             sb.AppendLine($"- {nameof(Fps)}: {Fps}");
             sb.AppendLine($"- Resolution: {Width}x{Height}");

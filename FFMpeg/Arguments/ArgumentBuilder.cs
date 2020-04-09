@@ -34,18 +34,36 @@ namespace FFMpeg.Arguments
             return this;
         }
 
-        public ArgumentBuilder AddVideoCodec(VideoCodec codec)
+        public ArgumentBuilder AddVideoCodec(string codec, bool includeYUV = true)
         {
-            return AddVideoCodec(codec, 0);
+            Add(new VideoCodecArgument(codec, includeYUV));
+            return this;
+        }
+        public ArgumentBuilder AddVideoCodec(int bitrate, bool includeYUV = true)
+        {
+            Add(new VideoCodecArgument(bitrate, includeYUV));
+            return this;
         }
 
-        public ArgumentBuilder AddVideoCodec(VideoCodec codec, int bitrate, bool includeYUV = true)
+        public ArgumentBuilder AddVideoCodec(string codec, int bitrate, bool includeYUV = true)
         {
             Add(new VideoCodecArgument(codec, bitrate, includeYUV));
             return this;
         }
 
-        public ArgumentBuilder AddAudioCodec(AudioCodec codec, int bitrate)
+        public ArgumentBuilder AddAudioCodec(string codec)
+        {
+            Add(new AudioCodecArgument(codec));
+            return this;
+        }
+
+        public ArgumentBuilder AddAudioCodec(int bitrate)
+        {
+            Add(new AudioCodecArgument(bitrate));
+            return this;
+        }
+
+        public ArgumentBuilder AddAudioCodec(string codec, int bitrate)
         {
             Add(new AudioCodecArgument(codec, bitrate));
             return this;
