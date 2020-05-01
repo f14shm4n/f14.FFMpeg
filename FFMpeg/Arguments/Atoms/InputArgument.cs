@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -20,6 +22,8 @@ namespace FFMpeg.Arguments.Atoms
         {
             _sources = values.Select(v => v.AbsoluteUri).ToArray();
         }
+
+        public IReadOnlyList<string> Sources => new ReadOnlyCollection<string>(_sources);
 
         /// <inheritdoc/>
         public string GetStringValue()

@@ -82,26 +82,33 @@ namespace FFMpeg.Probe
             {
                 foreach (var stream in streams)
                 {
-                    var bitRate = Convert.ToInt32(stream.BitRate, CultureInfo.InvariantCulture);
-                    var fr = stream.FrameRate.Split('/');
-                    var commonDenominator = FFProbeHelper.Gcd(stream.Width, stream.Height);
-                    var duration = FFProbeHelper.ParseDuration(stream.Duration);
-
-                    var vsmd = new VideoStreamMetadata
+                    try
                     {
-                        Format = stream.CodecName,
-                        Fps = Math.Round(Convert.ToDouble(fr[0], CultureInfo.InvariantCulture) / Convert.ToDouble(fr[1], CultureInfo.InvariantCulture), 3),
-                        Bitrate = bitRate,
-                        Height = stream.Height,
-                        Width = stream.Width,
-                        Ratio = stream.Width / commonDenominator + ":" + stream.Height / commonDenominator,
-                        Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
-                        Duration = duration
-                    };
+                        var bitRate = Convert.ToInt32(stream.BitRate, CultureInfo.InvariantCulture);
+                        var fr = stream.FrameRate.Split('/');
+                        var commonDenominator = FFProbeHelper.Gcd(stream.Width, stream.Height);
+                        var duration = FFProbeHelper.ParseDuration(stream.Duration);
 
-                    metadata.AddVideoStream(vsmd);
+                        var vsmd = new VideoStreamMetadata
+                        {
+                            Format = stream.CodecName,
+                            Fps = Math.Round(Convert.ToDouble(fr[0], CultureInfo.InvariantCulture) / Convert.ToDouble(fr[1], CultureInfo.InvariantCulture), 3),
+                            Bitrate = bitRate,
+                            Height = stream.Height,
+                            Width = stream.Width,
+                            Ratio = stream.Width / commonDenominator + ":" + stream.Height / commonDenominator,
+                            Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
+                            Duration = duration
+                        };
 
-                    metadata.Duration = Max(metadata.Duration, duration);
+                        metadata.AddVideoStream(vsmd);
+
+                        metadata.Duration = Max(metadata.Duration, duration);
+                    }
+                    catch (Exception)
+                    {
+                        // TODO: Log ex
+                    }
                 }
             }
         }
@@ -112,20 +119,27 @@ namespace FFMpeg.Probe
             {
                 foreach (var stream in streams)
                 {
-                    var bitRate = Convert.ToInt32(stream.BitRate, CultureInfo.InvariantCulture);
-                    var duration = FFProbeHelper.ParseDuration(stream.Duration);
-
-                    var asmd = new AudioStreamMetadata
+                    try
                     {
-                        Format = stream.CodecName,
-                        Bitrate = bitRate,
-                        Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
-                        Duration = duration
-                    };
+                        var bitRate = Convert.ToInt32(stream.BitRate, CultureInfo.InvariantCulture);
+                        var duration = FFProbeHelper.ParseDuration(stream.Duration);
 
-                    metadata.AddAudioStream(asmd);
+                        var asmd = new AudioStreamMetadata
+                        {
+                            Format = stream.CodecName,
+                            Bitrate = bitRate,
+                            Size = (long)Math.Round(bitRate * duration.TotalSeconds / 8),
+                            Duration = duration
+                        };
 
-                    metadata.Duration = Max(metadata.Duration, duration);
+                        metadata.AddAudioStream(asmd);
+
+                        metadata.Duration = Max(metadata.Duration, duration);
+                    }
+                    catch (Exception)
+                    {
+                        // TODO: Log ex
+                    }
                 }
             }
         }

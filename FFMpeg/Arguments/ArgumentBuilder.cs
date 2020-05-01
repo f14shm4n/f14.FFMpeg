@@ -69,6 +69,12 @@ namespace FFMpeg.Arguments
             return this;
         }
 
+        public ArgumentBuilder AddScale(int width, int height)
+        {
+            Add(new ScaleArgument(width, height));
+            return this;
+        }
+
         #endregion
 
         #region Interface
